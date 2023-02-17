@@ -1,4 +1,7 @@
 <?php
+
+// with the help of Mysqli method
+
 //error_reporting(0);
 $servername = "localhost";
 $username = "root";
