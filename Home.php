@@ -2,14 +2,7 @@
 include 'oops_method.php';
 $obj =new Scrawl();
 $get_record=$obj->displayRecords();
-
-
-
-
-
-
-
-
+$obj->scraping_data();
 
 
 ?>
@@ -29,10 +22,23 @@ $get_record=$obj->displayRecords();
 
 </head>
 <body>
+<div class="card-bottom">
+<div class="row">
+<div class="col-7">
+<p class="new-category">
+<a  href="https://dailynewshighlights.com/sports" title="Sports">
+Sports
+</a>
+</p>
+</div>
+</div>
+</div>
+
 <?php
 while($row=$get_record->fetch_assoc()){
     
     ?>
+    
 <div class="card common-card  card-block-small col-lg-3 mt-4" news_card="257367">
 <div class="card-horizontal">
 <div class="img-square-wrapper">
@@ -44,25 +50,18 @@ while($row=$get_record->fetch_assoc()){
 </a>
 </div>
 <h4 class="card-title">
-<a href="" target="_blank"  title="<?php echo $row['title']?>"><?php echo $row['title']?>
+<a href="" target="_blank"  title="<?php echo $row['title']?>"><?php echo $row['title'];
+?>
 </a>
 </h4>
 </div>
 </div>
-<div class="card-bottom">
-<div class="row">
-<div class="col-7">
-<p class="new-category">
-<a  href="https://dailynewshighlights.com/sports" title="">
-Sports
-</a>
-</p>
-</div>
+
 <div class="user-status">
 <div class="row">
 <div class="col-4">
 <p class="time-stamp">
-<?php echo $row['post_date']?>
+<?php echo $obj->getTimeDifference($row['post_date'])?>
 </p>
 </div>
 
