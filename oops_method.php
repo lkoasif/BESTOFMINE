@@ -1,4 +1,7 @@
 <?php
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\HTMLElement\HTMLSpanElement;
+
 class Scrawl {
 
 private $servername='localhost';
@@ -52,8 +55,8 @@ public function check_existdata($title,$img,$date){
     
      
 }
+
 /*public function  displayRecords(){
- $sql="select * from image_title ";
  //$sql="select * from image_title where title=? or image_url=? or post_date=? ";
  $statement = $this->conn->prepare($sql);
  $statement->bind_param('sss'$statement);
@@ -67,16 +70,47 @@ public function check_existdata($title,$img,$date){
 
 }*/
 public function displayRecords(){
- $sql="select * from image_title";
+ $sql="select * from image_title order by post_date desc";
   $result=$this->conn->query($sql);
   if($result->num_rows>0){
     return $result;
 
 }
 }
+
+public function getTimeDifference($time) {
+  //Let's set the current time
+  $currentTime = date('Y-m-d H:i:s');
+  $toTime = strtotime($currentTime);
+
+  //And the time the notification was set
+  $fromTime = strtotime($time);
+
+  //Now calc the difference between the two
+  $timeDiff = floor(abs($toTime - $fromTime) / 60);
+
+  //Now we need find out whether or not the time difference needs to be in
+  //minutes, hours, or days
+  if ($timeDiff < 2) {
+      $timeDiff = "Just now";
+  } elseif ($timeDiff > 2 && $timeDiff < 60) {
+      $timeDiff = floor(abs($timeDiff)) . " minutes ago";
+  } elseif ($timeDiff > 60 && $timeDiff < 120) {
+      $timeDiff = floor(abs($timeDiff / 60)) . " hour ago";
+  } elseif ($timeDiff < 1440) {
+      $timeDiff = floor(abs($timeDiff / 60)) . " hours ago";
+  } elseif ($timeDiff > 1440 && $timeDiff < 2880) {
+      $timeDiff = floor(abs($timeDiff / 1440)) . " day ago";
+  } elseif ($timeDiff > 2880) {
+      $timeDiff = floor(abs($timeDiff / 1440)) . " days ago";
+  }
+
+  return $timeDiff;
 }
 
-use Gt\Dom\HTMLDocument;
+public function scraping_data()
+{
+//use Gt\Dom\HTMLDocument;
 require './vendor/autoload.php';
 $obj=new Scrawl();
 //include ('html.php');
@@ -85,6 +119,7 @@ $html_codes = file_get_contents($url);
 //echo $html_codes;
 $document = new HTMLDocument($html_codes);
 $news_cards = $document->querySelectorAll('.card');
+echo "crawling....<br>";
 foreach($news_cards as $card)
 {
     $title = $obj->conn->real_escape_string($card->querySelector('.card-title')->innerText);
@@ -97,11 +132,9 @@ foreach($news_cards as $card)
 
    
  
- }else{
-
-   
-
  }
+}
+}
 }
 
 ?>
