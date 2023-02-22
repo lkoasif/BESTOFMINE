@@ -71,9 +71,9 @@ foreach($news_cards as $card)
    $title = $obj->conn->real_escape_string($card->querySelector('.card-title')->innerText);
    $img = $obj->conn->real_escape_string($card->querySelector('.img-fluid')->src);
 
-    $time = $card->querySelector('.time-stamp')->innerText;
-    // echo trim($time);
-    echo $oneHourAgo = date('Y-m-d H:i:s', strtotime($time));
+   echo  $time = $card->querySelector('.time-stamp')->innerText;
+     //echo trim($time);
+    //echo $oneHourAgo = date('Y-m-d H:i:s', strtotime($time));
     // exit;
 
 
