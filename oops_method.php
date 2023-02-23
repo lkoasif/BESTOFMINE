@@ -48,10 +48,10 @@ public function check_existdata($title,$img,$date){
 
     $sql="INSERT INTO image_title(title,image_url,post_date) VALUES (?, ?, ?)";
     $statement = $this->conn->prepare($sql);
-    $statement->bind_param('sss', $title, $img, $date);
-    $statement->execute();
+   $statement->bind_param('sss', str_replace('\n\n','',$title), $img, $date);
+   $statement->execute();
     
-    Return $statement->get_result();
+    return $statement->get_result();
     
      
 }
@@ -70,7 +70,7 @@ public function check_existdata($title,$img,$date){
 
 }*/
 public function displayRecords(){
- $sql="select * from image_title order by post_date desc";
+  $sql="select * from image_title order by post_date desc";
   $result=$this->conn->query($sql);
   if($result->num_rows>0){
     return $result;
@@ -113,7 +113,6 @@ public function scraping_data()
 //use Gt\Dom\HTMLDocument;
 require './vendor/autoload.php';
 $obj=new Scrawl();
-//include ('html.php');
 $url = "https://dailynewshighlights.com/sports";
 $html_codes = file_get_contents($url); 
 //echo $html_codes;
@@ -122,17 +121,20 @@ $news_cards = $document->querySelectorAll('.card');
 echo "crawling....<br>";
 foreach($news_cards as $card)
 {
+  
     $title = $obj->conn->real_escape_string($card->querySelector('.card-title')->innerText);
-     $img = $obj->conn->real_escape_string($card->querySelector('.img-fluid')->src);
+    
+    $img = $obj->conn->real_escape_string($card->querySelector('.img-fluid')->src);
 
-     $time = $card->querySelector('.time-stamp')->innerText;
+    $time = $card->querySelector('.time-stamp')->innerText;
     $date= $obj->conn->real_escape_string(date('Y-m-d H:i:s', strtotime($time)));
-  $fetch_record=$obj->check_existdata($title,$img,$date);
-  if($fetch_record){
+   $fetch_record=$obj->check_existdata($title,$img,$date);
+    if($fetch_record){
 
    
  
  }
+
 }
 }
 }
